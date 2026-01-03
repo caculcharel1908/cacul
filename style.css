@@ -302,11 +302,12 @@ main { padding: 16px; min-height: calc(100vh - 120px); }
 .toast.success { border-left-color: var(--hijau-sukses); }
 .toast-icon { font-size: 20px; }
 .toast-msg { font-size: 14px; font-weight: 600; color: #333; }
-/* ============================
-   RESPONSIVE MOBILE FIX
-   ============================ */
+
+/* ========================================================================== 
+   RESPONSIVE FIX UNTUK MOBILE
+   ========================================================================== */
 @media (max-width: 600px) {
-  /* Input & tombol full width */
+  /* Input & tombol jadi full width */
   .pro-input,
   .create-btn,
   #jobType {
@@ -321,7 +322,7 @@ main { padding: 16px; min-height: calc(100vh - 120px); }
     align-items: stretch;
   }
 
-  /* Modal menyesuaikan layar HP */
+  /* Modal tampil full screen di HP */
   .page-modal {
     left: 0 !important;
     top: 0 !important;
@@ -335,16 +336,15 @@ main { padding: 16px; min-height: calc(100vh - 120px); }
     padding: 12px;
   }
 
-  /* Table bisa di-scroll horizontal */
+  /* Tabel menyesuaikan layar kecil */
   .paper-root table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+    table-layout: auto;
+    word-wrap: break-word;
   }
-
-  /* Judul form lebih kecil */
-  .paper-root .title {
-    font-size: 18px;
+  .paper-root th,
+  .paper-root td {
+    font-size: 12px;
+    padding: 4px;
   }
 
   /* Navbar tabs bisa wrap */
