@@ -303,25 +303,10 @@ main { padding: 16px; min-height: calc(100vh - 120px); }
 .toast-icon { font-size: 20px; }
 .toast-msg { font-size: 14px; font-weight: 600; color: #333; }
 
-/* ========================================================================== 
-   RESPONSIVE SCALE: HP tampilan mengecil utuh
-   ========================================================================== */
 @media (max-width: 600px) {
-  /* Kecilkan font seluruh form */
-  .paper-root {
-    font-size: 10px !important;   /* default 14px → jadi kecil */
-    transform: scale(0.85);       /* perkecil seluruh form */
-    transform-origin: top left;   /* biar mengecil dari pojok kiri atas */
-    width: 118%;                  /* kompensasi biar tetap penuh */
-  }
-
-  /* Modal full screen */
+  /* Modal tetap utuh, tidak diubah */
   .page-modal {
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    border-radius: 0 !important;
+    /* tidak perlu diubah, biarkan seperti desktop */
   }
 
   /* Body modal padding lebih kecil */
@@ -329,20 +314,26 @@ main { padding: 16px; min-height: calc(100vh - 120px); }
     padding: 8px !important;
   }
 
-  /* Input & tombol full width */
+  /* Konten form mengecil */
+  .paper-root {
+    transform: scale(0.8);              /* perkecil isi form */
+    transform-origin: top center;       /* mengecil dari tengah atas */
+  }
+
+  /* Kecilkan font dan padding dalam tabel */
+  .paper-root th,
+  .paper-root td,
+  .paper-root input,
+  .paper-root textarea {
+    font-size: 10px !important;
+    padding: 3px !important;
+  }
+
+  /* Input dan tombol di atas form */
   .pro-input,
   .create-btn,
   #jobType {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-top: 6px;
     font-size: 12px !important;
-  }
-
-  /* Tabel: font & padding kecil */
-  .paper-root th,
-  .paper-root td {
-    font-size: 10px !important;
-    padding: 3px !important;
+    padding: 10px !important;
   }
 }
