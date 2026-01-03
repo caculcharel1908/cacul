@@ -302,3 +302,58 @@ main { padding: 16px; min-height: calc(100vh - 120px); }
 .toast.success { border-left-color: var(--hijau-sukses); }
 .toast-icon { font-size: 20px; }
 .toast-msg { font-size: 14px; font-weight: 600; color: #333; }
+
+/* =============================================================
+   RESPONSIVE FIX: Khusus untuk layar HP (Max-width 600px)
+   ============================================================= */
+@media (max-width: 600px) {
+    /* 1. Navbar & Tabs agar lebih nyaman di jempol */
+    .navbar-tabs {
+        padding: 4px;
+        gap: 4px;
+    }
+    .tab {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    /* 2. Form Input Dashboard: Paksa susun ke bawah (Vertikal) */
+    .row, .actions {
+        flex-direction: column; 
+        align-items: stretch; /* Biar input lebarnya penuh */
+        text-align: center;
+    }
+
+    .pro-input {
+        width: 100%; /* Input PRO jadi lebar penuh di HP */
+    }
+
+    .create-btn {
+        width: 100%;
+    }
+
+    /* 3. Modal Form: Kurangi padding agar area kertas lebih luas */
+    .page-modal {
+        top: 10px;
+        height: 95vh;
+        width: 98vw;
+        left: 1vw;
+    }
+
+    .page-body {
+        padding: 10px; /* Kurangi padding dari 30px ke 10px */
+    }
+
+    /* 4. Tabel Form agar bisa di-scroll ke samping jika lebar */
+    .paper-root {
+        padding: 10px;
+        font-size: 12px; /* Perkecil font dikit di HP */
+        overflow-x: auto;
+    }
+
+    /* 5. Header Form (Logo) agar tidak tumpang tindih */
+    .paper-root .brandbar {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
