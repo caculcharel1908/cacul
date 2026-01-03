@@ -303,28 +303,36 @@ main { padding: 16px; min-height: calc(100vh - 120px); }
 .toast-icon { font-size: 20px; }
 .toast-msg { font-size: 14px; font-weight: 600; color: #333; }
 
-/* --- RESPONSIVE FIX (HP) --- */
+/* --- FIX RESPONSIVE TOTAL --- */
 @media screen and (max-width: 600px) {
+    /* Paksa Dashboard Header & Input jadi satu kolom */
     .row, .actions {
         display: flex !important;
         flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 12px !important;
-    }
-    .pro-input, .create-btn, #jobType {
         width: 100% !important;
-        margin: 5px 0 !important;
+        gap: 15px !important;
     }
+    
+    /* Buat Input PRO dan Button jadi lebar penuh */
+    .pro-input, .create-btn, select#jobType {
+        width: 100% !important;
+        display: block !important;
+    }
+
+    /* Modal Form agar tidak melayang aneh di HP */
     .page-modal {
-        top: 0 !important; left: 0 !important;
-        width: 100vw !important; height: 100vh !important;
-        max-width: none !important; max-height: none !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
         border-radius: 0 !important;
+        z-index: 99999 !important;
     }
-    .page-body { padding: 10px !important; }
-    .paper-root { 
-        padding: 10px !important; 
-        overflow-x: auto !important; 
-        -webkit-overflow-scrolling: touch;
+
+    /* Area isi form agar bisa digeser */
+    .page-body {
+        padding: 10px !important;
+        overflow-x: auto !important;
     }
 }
