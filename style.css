@@ -215,71 +215,49 @@ main { padding: 16px; min-height: calc(100vh - 120px); }
 .image-full-wrapper img { max-width: 100%; height: auto; border-radius: 4px; }
 
 /* ==========================================================================
-   FIX: SCROLL SAMPING UTUH (ANTI POTONG)
+   FIX FINAL: MODE PDF READER (SCROLL SAMPING UTUH)
    ========================================================================== */
 
-/* 1. Atur Jendelanya (Wadah Scroll) */
-.page-body {
-  display: block !important; /* Matikan flexbox agar scrollbar normal */
-  width: 100% !important;
-  height: 100% !important;
-  
-  /* Aktifkan scroll ke segala arah */
-  overflow: auto !important; 
-  
-  /* Agar geser di HP licin (momentum scroll) */
-  -webkit-overflow-scrolling: touch; 
-  
-  /* Hapus padding wadah agar kertas bisa mentok pinggir */
-  padding: 0 !important; 
-  position: relative; /* Penting untuk konteks scroll */
-}
-
-/* 2. Atur Kertasnya (Isi Konten) */
-.paper-root {
-  /* KUNCI LEBAR KERTAS SECARA PAKSA */
-  /* Kita pakai 1000px agar cukup luas untuk semua tabel */
-  width: 1000px !important; 
-  
-  /* Pastikan tidak ada max-width yang membatasi */
-  max-width: none !important; 
-  
-  /* Reset margin agar kertas menempel di pojok kiri atas saat discroll */
-  margin: 0 !important; 
-  
-  /* Beri sedikit napas di pinggir kertas */
-  padding: 20px !important; 
-  
-  /* Pastikan background putih menutupi seluruh lebar scroll */
-  background: #fff;
-  box-sizing: border-box;
-}
-
-/* 3. Perbaikan Posisi Modal di HP (Agar full layar tapi tetap ada jarak) */
 @media screen and (max-width: 768px) {
+
+  /* 1. MODAL FULLSCREEN (Agar area baca luas) */
   .page-modal {
-    width: 95vw !important; /* Lebar modal 95% layar HP */
-    height: 85vh !important; /* Tinggi modal 85% layar HP */
-    
-    /* Tengahkan Modal */
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    
-    /* Pastikan header dan footer tidak menutupi scroll */
-    display: flex;
-    flex-direction: column;
+    width: 100vw !important;
+    height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
-  
-  /* Header tetap diam di atas */
-  .page-header {
-    flex-shrink: 0;
+
+  /* 2. HEADER & FOOTER (Diam/Sticky) */
+  .page-header, .page-footer {
+    flex-shrink: 0 !important; /* Jangan mengecil */
+    z-index: 50 !important;
   }
-  
-  /* Footer tetap diam di bawah */
-  .page-footer {
-    position: relative !important; /* Ubah jadi relative agar tidak melayang menutupi konten bawah */
-    flex-shrink: 0;
-    background: #f1f5f9; /* Beri warna biar beda sama kertas */
+
+  /* 3. WADAH SCROLL (JENDELA KACA) */
+  /* Ini area abu-abu di belakang kertas */
+  .page-body {
+    flex: 1 !important; /* Isi sisa ruang tengah */
+    width: 100% !important; /* Lebar pas layar HP */
+    overflow: auto !important; /* SCROLL DI SINI! */
+    display: block !important;
+    background: #525659 !important; /* Warna abu gelap biar kertas terlihat jelas */
+    padding: 10px !important; /* Jarak kertas dari pinggir HP */
+    position: relative !important;
+  }
+
+  /* 4. KERTAS FORM (ISI KONTEN) */
+  /* Kita target div .wrap yang ada di dalam form HTML kamu */
+  .paper-root .wrap {
+    width: 1000px !important; /* KUNCI LEBAR KERTAS DI SINI */
+    min-width: 1000px !important;
+    background: #ffffff !important;
+    padding: 20px !important;
+    margin: 0 !important; /* Reset margin auto desktop */
+    box-shadow: 0 0 15px rgba(0,0,0,0.5) !important; /* Efek bayangan kertas */
   }
 }
