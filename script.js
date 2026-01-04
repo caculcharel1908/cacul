@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SCRIPT.JS - FIXED VERSION (NO ERROR, DRAG & BUTTONS WORKING)
+   SCRIPT.JS - FINAL VERSION
    ========================================================================== */
 const STORAGE_KEY = 'qc_integrated_jobs';
 
@@ -19,7 +19,6 @@ tabs.forEach(t => t.addEventListener('click', e => { e.preventDefault(); activat
 // 3. VARIABEL & SETUP MODAL
 const overlay = document.getElementById('overlay');
 const modalBody = document.getElementById('modalBody');
-// [PERBAIKAN] Menghapus cancelBtn karena tidak ada di HTML
 const closeBtn = document.getElementById('closeBtn');
 const saveBtn = document.getElementById('saveBtn');
 const completeBtn = document.getElementById('completeBtn');
@@ -61,10 +60,8 @@ async function loadFormHTML(fileName) {
         if (!response.ok) throw new Error("File form tidak ditemukan! Pastikan file ada di folder /forms/");
         const htmlContent = await response.text();
         modalBody.innerHTML = htmlContent;
-        
         runFormatting(); 
         setupFormTabs(); 
-        
         return true; 
     } catch (error) {
         console.error(error);
@@ -76,9 +73,7 @@ async function loadFormHTML(fileName) {
 function setupFormTabs() {
     const tabBtns = modalBody.querySelectorAll('.form-tab-btn');
     const tabPanels = modalBody.querySelectorAll('.form-tab-panel');
-
     if (tabBtns.length === 0) return;
-
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             tabBtns.forEach(b => b.classList.remove('active'));
@@ -125,15 +120,11 @@ function resetForm() {
     });
 }
 
-// 7. MODAL CONTROL (BUKA/TUTUP)
+// 7. MODAL CONTROL
 async function openModal(mode, job = null) {
     overlay.style.display = 'flex';
-    
-    // Reset posisi & state saat dibuka
-    modal.classList.remove('minimized');
-    modal.classList.remove('maximized');
-    modal.style.top = '50px'; 
-    modal.style.left = '50px'; 
+    modal.classList.remove('minimized', 'maximized');
+    modal.style.top = '50px'; modal.style.left = '50px'; 
     if(maxBtn) maxBtn.innerText = '□'; 
 
     let namaFileForm = 'circle-drive'; 
@@ -166,9 +157,7 @@ async function openModal(mode, job = null) {
 }
 
 function closeModal() {
-    overlay.style.display = 'none'; 
-    currentJobId = null; 
-    modalBody.innerHTML = ""; 
+    overlay.style.display = 'none'; currentJobId = null; modalBody.innerHTML = ""; 
     if (document.fullscreenElement) document.exitFullscreen();
 }
 
@@ -250,96 +239,50 @@ document.getElementById('completeSearchForm').addEventListener('submit', e => { 
 document.getElementById('completeQ').addEventListener('input', renderLists);
 renderLists();
 
-// ==========================================================================
-// 10. DRAG, MINIMIZE, & MAXIMIZE (LOGIC PERBAIKAN)
-// ==========================================================================
-
-// Event Listener Close
+// 10. DRAG, MINIMIZE, & MAXIMIZE
 if(closeBtn) closeBtn.addEventListener('click', closeModal);
-
-// DRAG LOGIC
-let isDragging = false; 
-let startX, startY, initialLeft, initialTop;
+let isDragging = false; let startX, startY, initialLeft, initialTop;
 
 if(dragHeader) {
     dragHeader.addEventListener('mousedown', (e) => {
-        // [FIX] Cek apakah yang diklik adalah tombol. Jika ya, jangan drag.
         if(e.target.closest('button') || modal.classList.contains('maximized')) return;
-        
-        isDragging = true; 
-        startX = e.clientX; 
-        startY = e.clientY;
-        const rect = modal.getBoundingClientRect(); 
-        initialLeft = rect.left; 
-        initialTop = rect.top;
-        
-        document.addEventListener('mousemove', onMouseMove); 
-        document.addEventListener('mouseup', onMouseUp);
+        isDragging = true; startX = e.clientX; startY = e.clientY;
+        const rect = modal.getBoundingClientRect(); initialLeft = rect.left; initialTop = rect.top;
+        document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp);
     });
-
-    // Double click header untuk Maximize (fitur tambahan ala Windows)
     dragHeader.addEventListener('dblclick', (e) => {
         if(e.target.closest('button')) return;
-        if (modal.classList.contains('minimized')) { 
-            modal.classList.remove('minimized'); 
-        } else { 
-            toggleMaximize(); 
-        } 
+        if (modal.classList.contains('minimized')) modal.classList.remove('minimized');
+        else toggleMaximize();
     });
 }
 
 function onMouseMove(e) {
     if (!isDragging) return;
-    let dx = e.clientX - startX; 
-    let dy = e.clientY - startY;
-    let newLeft = initialLeft + dx; 
-    let newTop = initialTop + dy;
-
-    // Batasan Layar
-    if (newTop < 0) newTop = 0; 
-    if (newLeft < 0) newLeft = 0;
+    let dx = e.clientX - startX; let dy = e.clientY - startY;
+    let newLeft = initialLeft + dx; let newTop = initialTop + dy;
+    if (newTop < 0) newTop = 0; if (newLeft < 0) newLeft = 0;
     if (newLeft > window.innerWidth - 50) newLeft = window.innerWidth - 50; 
     if (newTop > window.innerHeight - 50) newTop = window.innerHeight - 50;
-    
-    modal.style.left = `${newLeft}px`; 
-    modal.style.top = `${newTop}px`;
+    modal.style.left = `${newLeft}px`; modal.style.top = `${newTop}px`;
 }
+function onMouseUp() { isDragging = false; document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); }
 
-function onMouseUp() { 
-    isDragging = false; 
-    document.removeEventListener('mousemove', onMouseMove); 
-    document.removeEventListener('mouseup', onMouseUp); 
-}
-
-// MAXIMIZE LOGIC
 function toggleMaximize() {
     if (modal.classList.contains('minimized')) modal.classList.remove('minimized');
-    
     if (!document.fullscreenElement && !modal.classList.contains('maximized')) { 
-        // modal.classList.add('maximized'); // Jika mau full satu layar browser tanpa fullscreen mode
-        // Atau pakai Native Fullscreen API:
-        document.documentElement.requestFullscreen().catch((err) => {}); 
-        modal.classList.add('maximized'); 
-        maxBtn.innerText = '❐'; 
+        document.documentElement.requestFullscreen().catch((err) => {}); modal.classList.add('maximized'); maxBtn.innerText = '❐'; 
     } else { 
-        if (document.fullscreenElement) document.exitFullscreen(); 
-        modal.classList.remove('maximized'); 
-        maxBtn.innerText = '□'; 
+        if (document.fullscreenElement) document.exitFullscreen(); modal.classList.remove('maximized'); maxBtn.innerText = '□'; 
     }
 }
 if(maxBtn) maxBtn.addEventListener('click', toggleMaximize);
 
-// MINIMIZE LOGIC
 if(minBtn) minBtn.addEventListener('click', () => { 
     if (document.fullscreenElement) document.exitFullscreen(); 
-    modal.classList.remove('maximized'); 
-    modal.classList.toggle('minimized'); 
+    modal.classList.remove('maximized'); modal.classList.toggle('minimized'); 
 });
 
-// Listener perubahan fullscreen (misal tekan ESC)
 document.addEventListener('fullscreenchange', () => { 
-    if (!document.fullscreenElement) { 
-        modal.classList.remove('maximized'); 
-        if(maxBtn) maxBtn.innerText = '□'; 
-    } 
+    if (!document.fullscreenElement) { modal.classList.remove('maximized'); if(maxBtn) maxBtn.innerText = '□'; } 
 });
